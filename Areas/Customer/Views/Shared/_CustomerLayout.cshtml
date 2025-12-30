@@ -1,0 +1,219 @@
+@using Fahasa.Data
+@using Microsoft.EntityFrameworkCore
+@using System.Linq
+@using Fahasa.Services
+@inject ApplicationDbContext _context
+@inject CartService _cartService
+@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> SignInManager
+@inject Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> UserManager
+
+@{
+    var categories = _context.Categories
+        .Where(c => c.IsActive)
+        .OrderBy(c => c.DisplayOrder)
+        .ThenBy(c => c.Name)
+        .ToList();
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="~/customer/img/fav.png">
+    <meta charset="UTF-8">
+    <title>Fahasa - Nhà sách trực tuyến</title>
+
+    <!-- Standard CSS -->
+    <link rel="stylesheet" href="~/customer/css/bootstrap.css">
+    <link rel="stylesheet" href="~/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/customer/css/main.css">
+    <!-- Custom Fahasa Theme -->
+    <link rel="stylesheet" href="~/customer/css/custom-fahasa.css">
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="fahasa-header">
+        <!-- Top Bar: Logo, Search, Account -->
+        <div class="header-top py-3 bg-white border-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <!-- Logo -->
+                    <div class="col-lg-3 col-md-3 col-4">
+                        <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="d-block">
+                            <img src="~/customer/img/logo.png" alt="Fahasa" style="max-height: 40px;">
+                        </a>
+                    </div>
+                    
+                    <!-- Search Bar (Desktop) -->
+                    <div class="col-lg-6 col-md-6 d-none d-md-block">
+                        <form asp-area="Customer" asp-controller="Category" asp-action="Index" method="get" class="d-flex">
+                            <div class="input-group search-group">
+                                <input type="text" class="form-control border-danger" name="search" placeholder="Tìm kiếm sách...">
+                                <div class="input-group-append">
+                                    <button class="btn btn-danger" type="submit">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Icons -->
+                    <div class="col-lg-3 col-md-3 col-8 text-right">
+                        <div class="d-flex justify-content-end align-items-center">
+                             <!-- Mobile Search Toggle -->
+                             <a href="#" class="d-block d-md-none mr-3 text-dark">
+                                <i class="bi bi-search" style="font-size: 1.5rem;"></i>
+                            </a>
+
+                            <!-- Account -->
+                            <div class="dropdown mx-2 position-relative">
+                                <a href="#" class="text-secondary text-decoration-none d-flex flex-column align-items-center" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div class="position-relative">
+                                        <i class="bi bi-person d-block" style="font-size: 1.6rem;"></i>
+                                        @if (SignInManager.IsSignedIn(User))
+                                        {
+                                            <span class="position-absolute bg-success rounded-circle" style="width: 8px; height: 8px; bottom: 5px; right: 0;"></span>
+                                        }
+                                    </div>
+                                    <small class="d-none d-lg-block mt-n1" style="font-size: 0.75rem;">
+                                        @(SignInManager.IsSignedIn(User) ? (User.Identity.Name.Length > 10 ? User.Identity.Name.Substring(0, 10) + "..." : User.Identity.Name) : "Tài khoản")
+                                    </small>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow-sm border-0 mt-2" aria-labelledby="accountDropdown" style="min-width: 200px;">
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <div class="px-3 py-2 border-bottom mb-2 bg-light">
+                                            <span class="small text-muted d-block">Xin chào,</span>
+                                            <span class="font-weight-bold text-dark">@User.Identity.Name</span>
+                                        </div>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a class="dropdown-item py-2 small font-weight-bold text-primary" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                                                <i class="bi bi-speedometer2 mr-2"></i> Trang quản trị
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                        }
+                                        <a class="dropdown-item py-2 small" asp-area="Customer" asp-controller="Account" asp-action="Profile"><i class="bi bi-person-gear mr-2"></i> Thông tin tài khoản</a>
+                                        <a class="dropdown-item py-2 small" asp-area="Customer" asp-controller="Tracking" asp-action="Index"><i class="bi bi-box-seam mr-2"></i> Đơn hàng của tôi</a>
+                                        <a class="dropdown-item py-2 small" asp-area="Customer" asp-controller="Address" asp-action="Index"><i class="bi bi-geo-alt mr-2"></i> Sổ địa chỉ</a>
+                                        <div class="dropdown-divider"></div>
+                                        <form asp-area="Customer" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                            <button type="submit" class="dropdown-item py-2 small text-danger"><i class="bi bi-box-arrow-right mr-2"></i> Đăng xuất</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item py-2 small" asp-area="Customer" asp-controller="Account" asp-action="Login"><i class="bi bi-box-arrow-in-right mr-2"></i> Đăng nhập</a>
+                                        <a class="dropdown-item py-2 small" asp-area="Customer" asp-controller="Account" asp-action="Register"><i class="bi bi-person-plus mr-2"></i> Đăng ký</a>
+                                    }
+                                </div>
+                            </div>
+ 
+                             <!-- Tracking -->
+                            <a asp-area="Customer" asp-controller="Tracking" asp-action="Index" class="mx-2 text-center text-secondary text-decoration-none d-flex flex-column align-items-center">
+                                <i class="bi bi-truck d-block" style="font-size: 1.6rem;"></i>
+                                <small class="d-none d-lg-block mt-n1" style="font-size: 0.75rem;">Đơn hàng</small>
+                            </a>
+
+                            <!-- Cart -->
+                            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="mx-2 text-center text-secondary text-decoration-none position-relative d-flex flex-column align-items-center">
+                                <div class="position-relative">
+                                    <i class="bi bi-cart3 d-block" style="font-size: 1.6rem;"></i>
+                                    <span class="badge badge-pill badge-danger position-absolute" style="top: -5px; right: -8px; font-size: 0.65rem; padding: 0.25em 0.5em;">@_cartService.GetTotalItems()</span>
+                                </div>
+                                <small class="d-none d-lg-block mt-n1" style="font-size: 0.75rem;">Giỏ hàng</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="header-bottom bg-white shadow-sm border-bottom">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-light p-0">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="mainNav">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" asp-area="Customer" asp-controller="Category" asp-action="Index">
+                                    <i class="bi bi-grid-fill mr-1"></i> DANH MỤC SÁCH
+                                </a>
+                            </li>
+                            @if (categories != null)
+                            {
+                                foreach (var cat in categories.Take(6))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-uppercase" asp-area="Customer" asp-controller="Category" asp-action="Index" asp-route-categoryId="@cat.Id">@cat.Name</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="min-height: 60vh; background-color: #f5f5fa; padding-bottom: 40px;">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top pt-5 pb-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="font-weight-bold text-uppercase mb-3">Về Fahasa</h5>
+                    <p class="small text-muted">
+                        Lầu 5, 387-389 Hai Bà Trưng, Quận 3, TP HCM<br>
+                        Công Ty Cổ Phần Phát Hành Sách TP HCM - FAHASA<br>
+                        Fahasa.com nhận đặt hàng trực tuyến và giao hàng tận nơi.
+                    </p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="font-weight-bold text-uppercase mb-3">Dịch vụ & Hỗ trợ</h5>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-secondary">Điều khoản sử dụng</a></li>
+                        <li><a href="#" class="text-secondary">Chính sách bảo mật</a></li>
+                        <li><a href="#" class="text-secondary">Chính sách đổi - trả - hoàn tiền</a></li>
+                        <li><a href="#" class="text-secondary">Phương thức vận chuyển</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="font-weight-bold text-uppercase mb-3">Kết nối</h5>
+                    <p class="small text-muted">Đăng ký nhận bản tin để không bỏ lỡ những ưu đãi hấp dẫn.</p>
+                     <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Email của bạn">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-danger" type="button">Gửi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top pt-3 text-center">
+                <p class="small text-muted m-0">&copy; @DateTime.Now.Year Fahasa Clone. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/customer/js/vendor/jquery-2.2.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="~/customer/js/vendor/bootstrap.min.js"></script>
+    <script src="~/customer/js/main.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <partial name="_Notification" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

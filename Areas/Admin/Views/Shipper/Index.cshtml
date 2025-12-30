@@ -1,0 +1,137 @@
+@model Fahasa.Models.Order
+@{
+    ViewData["Title"] = "Shipper Dashboard";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <!-- Search Card -->
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-body p-5 text-center">
+                <div class="avatar avatar-xl bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4">
+                    <i class="bi bi-truck text-primary fs-1"></i>
+                </div>
+                <h3 class="fw-bold mb-2">Tra Cứu Giao Hàng</h3>
+                <p class="text-muted mb-4">Nhập mã đơn hàng để xem chi tiết và cập nhật trạng thái</p>
+                
+                <form asp-action="Index" method="get" class="mx-auto" style="max-width: 500px;">
+                    <div class="input-group input-group-lg shadow-sm">
+                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-hash"></i></span>
+                        <input type="text" class="form-control border-start-0" name="searchOrderNumber" placeholder="Ví dụ: 20251229..." required autofocus>
+                        <button class="btn btn-primary" type="submit">Tìm Kiếm</button>
+                    </div>
+                </form>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger mt-4 d-inline-block px-4" role="alert">
+                        <i class="bi bi-exclamation-circle me-2"></i> @ViewBag.Error
+                    </div>
+                }
+                 @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success mt-4 d-inline-block px-4" role="alert">
+                        <i class="bi bi-check-circle me-2"></i> @TempData["Success"]
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (Model != null)
+        {
+            <!-- Order Details Card -->
+            <div class="card shadow border-0">
+                <div class="card-header bg-light py-3 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted small text-uppercase fw-bold">Đơn hàng</span>
+                            <h4 class="mb-0 fw-bold text-primary">#@Model.OrderNumber</h4>
+                        </div>
+                        <div>
+                             @if(Model.Status == Fahasa.Models.OrderStatus.Pending) {
+                                <span class="badge bg-warning text-dark fs-6 px-3 py-2 rounded-pill">Chờ xử lý</span>
+                            } else if (Model.Status == Fahasa.Models.OrderStatus.Processing) {
+                                <span class="badge bg-info text-dark fs-6 px-3 py-2 rounded-pill">Đang xử lý</span>
+                            } else if (Model.Status == Fahasa.Models.OrderStatus.Shipping) {
+                                <span class="badge bg-primary fs-6 px-3 py-2 rounded-pill">Đang giao</span>
+                            } else if (Model.Status == Fahasa.Models.OrderStatus.Delivered) {
+                                <span class="badge bg-success fs-6 px-3 py-2 rounded-pill">Hoàn thành</span>
+                            } else if (Model.Status == Fahasa.Models.OrderStatus.Cancelled) {
+                                <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill">Đã hủy</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6 border-end-md">
+                            <h6 class="text-uppercase text-muted fw-bold small mb-3">Người Nhận</h6>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="avatar avatar-m bg-light rounded-circle d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-person text-secondary"></i>
+                                </div>
+                                <h5 class="mb-0">@Model.RecipientName</h5>
+                            </div>
+                            
+                            <div class="d-flex align-items-start mb-3">
+                                <i class="bi bi-geo-alt text-danger me-3 mt-1 fs-5"></i>
+                                <div>
+                                    <span class="d-block text-dark fw-medium">@Model.AddressDetail</span>
+                                    <span class="text-muted small">@Model.Ward, @Model.District, @Model.Province</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-telephone text-success me-3 fs-5"></i>
+                                <span class="fw-bold fs-5">@Model.Phone</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 ps-md-4">
+                            <h6 class="text-uppercase text-muted fw-bold small mb-3">Thanh Toán & Hàng Hóa</h6>
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                                <span class="text-muted">Tổng tiền thu:</span>
+                                <span class="fs-4 fw-bold text-primary">@Model.TotalAmount.ToString("N0") đ</span>
+                            </div>
+                             <p class="mb-3 text-muted"> <i class="bi bi-credit-card me-2"></i> @Model.PaymentMethod</p>
+                            
+                            <h6 class="text-uppercase text-muted fw-bold small mb-2 mt-4">Sản Phẩm (@Model.OrderItems.Count)</h6>
+                            <ul class="list-group list-group-flush">
+                                @foreach(var item in Model.OrderItems)
+                                {
+                                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                        <span>@item.ProductName</span>
+                                        <span class="badge bg-light text-dark border rounded-pill">x @item.Quantity</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    @if (Model.Status == Fahasa.Models.OrderStatus.Shipping || Model.Status == Fahasa.Models.OrderStatus.Processing || Model.Status == Fahasa.Models.OrderStatus.Pending)
+                    {
+                        <hr class="my-4">
+                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                            <form asp-action="UpdateStatus" method="post" onsubmit="return confirm('Xác nhận giao hàng thành công?');">
+                                <input type="hidden" name="orderId" value="@Model.Id" />
+                                <input type="hidden" name="status" value="Delivered" />
+                                <button type="submit" class="btn btn-success btn-lg px-5 shadow-sm">
+                                    <i class="bi bi-box-seam-fill me-2"></i> Giao Thành Công
+                                </button>
+                            </form>
+                            
+                            <form asp-action="UpdateStatus" method="post" onsubmit="return confirm('Xác nhận khách hủy đơn?');">
+                                <input type="hidden" name="orderId" value="@Model.Id" />
+                                <input type="hidden" name="status" value="Cancelled" />
+                                <button type="submit" class="btn btn-outline-danger btn-lg px-5">
+                                    <i class="bi bi-x-circle me-2"></i> Khách Hủy
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

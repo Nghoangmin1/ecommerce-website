@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Fahasa.Models.Order>
+
+@{
+    ViewData["Title"] = "Quản Lý Đơn Hàng";
+}
+
+<!-- Page Header -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h4 class="mb-0 text-gray-800 fw-bold">Danh Sách Đơn Hàng</h4>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 bg-transparent border-bottom">
+        <form class="row g-3 align-items-center" method="get" asp-action="Index">
+            <div class="col-auto">
+                <div class="search-box position-relative" style="width: 250px;">
+                    <input class="form-control ps-5" type="search" name="search" placeholder="Số điện thoại..." value="@ViewBag.Search">
+                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                </div>
+            </div>
+            
+            <div class="col-auto">
+                <select class="form-select" name="status" onchange="this.form.submit()">
+                    <option value="">Tất cả trạng thái</option>
+                    @foreach (var status in Enum.GetValues(typeof(Fahasa.Models.OrderStatus)))
+                    {
+                        <option value="@status" selected="@(ViewBag.Status?.ToString() == status.ToString())">@status</option>
+                    }
+                </select>
+            </div>
+            
+            <div class="col-auto d-flex align-items-center gap-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-calendar3"></i></span>
+                    <input type="date" name="fromDate" class="form-control border-start-0 ps-0" value="@ViewBag.FromDate" placeholder="Từ ngày">
+                </div>
+                 <span class="text-muted">-</span>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-calendar3-event"></i></span>
+                    <input type="date" name="toDate" class="form-control border-start-0 ps-0" value="@ViewBag.ToDate" placeholder="Đến ngày">
+                </div>
+            </div>
+
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary shadow-sm">
+                    <i class="bi bi-funnel-fill me-1"></i> Lọc
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Xóa</a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Mã Đơn</th>
+                        <th>Khách Hàng</th>
+                        <th>Số Điện Thoại</th>
+                        <th>Tổng Tiền</th>
+                        <th>Trạng Thái</th>
+                        <th>Ngày Đặt</th>
+                        <th class="text-end pe-4">Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">#@item.OrderNumber</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-sm bg-primary-subtle rounded-circle text-primary d-flex align-items-center justify-content-center me-2">
+                                        <i class="bi bi-person-fill"></i>
+                                    </div>
+                                    <span class="fw-semibold text-dark">@(item.RecipientName ?? "Khách vãng lai")</span>
+                                </div>
+                            </td>
+                            <td>@item.Phone</td>
+                            <td class="fw-bold text-dark">@item.TotalAmount.ToString("N0") ₫</td>
+                            <td>
+                                @if(item.Status == Fahasa.Models.OrderStatus.Pending) {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">Chờ xử lý</span>
+                                } else if (item.Status == Fahasa.Models.OrderStatus.Processing) {
+                                    <span class="badge badge-phoenix badge-phoenix-info">Đang xử lý</span>
+                                } else if (item.Status == Fahasa.Models.OrderStatus.Shipping) {
+                                    <span class="badge badge-phoenix badge-phoenix-primary">Đang giao</span>
+                                } else if (item.Status == Fahasa.Models.OrderStatus.Delivered) {
+                                    <span class="badge badge-phoenix badge-phoenix-success">Hoàn thành</span>
+                                } else if (item.Status == Fahasa.Models.OrderStatus.Cancelled) {
+                                    <span class="badge badge-phoenix badge-phoenix-danger">Đã hủy</span>
+                                } else {
+                                    <span class="badge badge-phoenix badge-phoenix-secondary">@item.Status</span>
+                                }
+                            </td>
+                            <td class="text-muted small">@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-end pe-4">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                    Chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

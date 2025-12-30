@@ -1,0 +1,28 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> signInManager
+
+
+@if (signInManager.IsSignedIn(User))
+{
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="nav-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index" class="nav-link" >Management</a></li>
+    }
+    <li class="nav-item submenu dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tài khoản</a>
+        <ul class="dropdown-menu">
+            <li class="nav-item"><a class="nav-link" asp-area="Customer" asp-controller="Account" asp-action="ViewInfo">Thông tin tài khoản</a></li>
+            <li class="nav-item">
+                <form asp-area="Customer" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+                    @Html.AntiForgeryToken()
+                    <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;" class="nav-link">Đăng xuất</a>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item"><a asp-area="Customer" asp-controller="Account" asp-action="Login" class="nav-link" >Login</a></li>
+}
+<li class="nav-item m-2"></li>

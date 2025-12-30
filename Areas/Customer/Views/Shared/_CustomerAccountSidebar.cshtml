@@ -1,0 +1,63 @@
+<div class="col-md-3 mb-4">
+    <div class="card border-0" style="background-color: transparent;">
+        <div class="d-flex align-items-center mb-4 px-2">
+            <div class="position-relative">
+                <img src="https://ui-avatars.com/api/?name=@User.Identity.Name&background=CB1C22&color=fff&bold=true" class="rounded-circle shadow-sm" width="50" height="50" alt="Avatar">
+                <div class="bg-success rounded-circle border border-white position-absolute" style="width: 12px; height: 12px; bottom: 0; right: 0;"></div>
+            </div>
+            <div class="ml-3 overflow-hidden">
+                <small class="text-muted d-block mb-0">Tài khoản của</small>
+                <strong class="text-truncate d-block text-dark" style="font-size: 1.1rem;">@User.Identity.Name</strong>
+            </div>
+        </div>
+        
+        <div class="list-group list-group-flush bg-transparent">
+            <a asp-area="Customer" asp-controller="Account" asp-action="Profile" 
+               class="list-group-item list-group-item-action border-0 px-3 py-2 rounded mb-1 @(ViewContext.RouteData.Values["Action"].ToString() == "Profile" ? "active-menu" : "text-secondary")">
+                <i class="bi bi-person-circle mr-3 @(ViewContext.RouteData.Values["Action"].ToString() == "Profile" ? "text-danger" : "")"></i> 
+                <span class="@(ViewContext.RouteData.Values["Action"].ToString() == "Profile" ? "font-weight-bold text-danger" : "")">Thông tin tài khoản</span>
+            </a>
+            
+            <a asp-area="Customer" asp-controller="Tracking" asp-action="Index" 
+               class="list-group-item list-group-item-action border-0 px-3 py-2 rounded mb-1 @(ViewContext.RouteData.Values["Controller"].ToString() == "Tracking" ? "active-menu" : "text-secondary")">
+                <i class="bi bi-box-seam mr-3 @(ViewContext.RouteData.Values["Controller"].ToString() == "Tracking" ? "text-danger" : "")"></i>
+                <span class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Tracking" ? "font-weight-bold text-danger" : "")">Quản lý đơn hàng</span>
+            </a>
+
+            <a asp-area="Customer" asp-controller="Address" asp-action="Index" 
+               class="list-group-item list-group-item-action border-0 px-3 py-2 rounded mb-1 @(ViewContext.RouteData.Values["Controller"].ToString() == "Address" ? "active-menu" : "text-secondary")">
+                <i class="bi bi-geo-alt-fill mr-3 @(ViewContext.RouteData.Values["Controller"].ToString() == "Address" ? "text-danger" : "")"></i>
+                <span class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Address" ? "font-weight-bold text-danger" : "")">Sổ địa chỉ</span>
+            </a>
+            
+            <a asp-area="Customer" asp-controller="Account" asp-action="ChangePassword" 
+               class="list-group-item list-group-item-action border-0 px-3 py-2 rounded mb-1 @(ViewContext.RouteData.Values["Action"].ToString() == "ChangePassword" ? "active-menu" : "text-secondary")">
+                <i class="bi bi-shield-lock mr-3 @(ViewContext.RouteData.Values["Action"].ToString() == "ChangePassword" ? "text-danger" : "")"></i> 
+                <span class="@(ViewContext.RouteData.Values["Action"].ToString() == "ChangePassword" ? "font-weight-bold text-danger" : "")">Đổi mật khẩu</span>
+            </a>
+
+            <div class="dropdown-divider my-2"></div>
+
+             <form id="logoutFormCustomer" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="list-group-item list-group-item-action border-0 px-3 py-2 rounded text-secondary bg-transparent w-100 text-left hover-danger">
+                     <i class="bi bi-box-arrow-right mr-3"></i> Đăng xuất
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-group-item-action:hover {
+        background-color: #f8f9fa;
+        color: #d9534f !important;
+        text-decoration: none;
+    }
+    .list-group-item-action.active-menu {
+        background-color: #ffeef0;
+        color: #d9534f !important;
+    }
+    .hover-danger:hover {
+        color: #dc3545 !important;
+    }
+</style>

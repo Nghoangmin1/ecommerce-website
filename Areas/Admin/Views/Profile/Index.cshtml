@@ -1,0 +1,71 @@
+@model Fahasa.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white p-4">
+                <div class="text-center">
+                    <div class="avatar avatar-5xl mb-3">
+                        <img class="rounded-circle border border-2 border-white shadow-sm" src="~/admin/images/57.webp" alt="" />
+                    </div>
+                    <h3 class="mb-1">@Model.FullName</h3>
+                    <p class="text-body-secondary mb-0">@Model.Email</p>
+                    <div class="mt-2">
+                         @if (User.IsInRole("Admin"))
+                        {
+                            <span class="badge bg-primary">Quản trị viên</span>
+                        }
+                        else if (User.IsInRole("Shipper"))
+                        {
+                            <span class="badge bg-warning text-dark">Shipper</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Thành viên</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <h5 class="mb-3 text-body-emphasis border-bottom pb-2">Thông tin chi tiết</h5>
+                
+                <div class="row mb-3">
+                    <div class="col-4 text-body-secondary">Họ và tên</div>
+                    <div class="col-8 fw-bold text-body-highlight">@Model.FullName</div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-4 text-body-secondary">Email</div>
+                    <div class="col-8 fw-bold text-body-highlight">@Model.Email</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-4 text-body-secondary">Số điện thoại</div>
+                    <div class="col-8 fw-bold text-body-highlight">
+                        @(string.IsNullOrEmpty(Model.PhoneNumber) ? "Chưa cập nhật" : Model.PhoneNumber)
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-4 text-body-secondary">Ngày tham gia</div>
+                    <div class="col-8 fw-bold text-body-highlight">@Model.CreatedAt.ToString("dd/MM/yyyy")</div>
+                </div>
+
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success mt-4 mb-0" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+                    </div>
+                }
+            </div>
+            <div class="card-footer bg-light p-4 text-end">
+                <a asp-action="Edit" class="btn btn-primary">
+                    <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa hồ sơ
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

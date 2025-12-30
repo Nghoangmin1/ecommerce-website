@@ -1,0 +1,333 @@
+﻿@model Fahasa.Areas.Admin.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row mb-4">
+    <!-- Total Orders -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow h-100 py-2 border-start border-primary border-4 bg-white">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Tổng Đơn Hàng</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalOrders</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-cart-check-fill text-gray-300" style="font-size: 2.5rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Revenue -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow h-100 py-2 border-start border-success border-4 bg-white">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Doanh Thu</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalRevenue.ToString("N0") ₫</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-currency-dollar text-gray-300" style="font-size: 2.5rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Books -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow h-100 py-2 border-start border-info border-4 bg-white">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Sách</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalBooks</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-book-half text-gray-300" style="font-size: 2.5rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Users -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow h-100 py-2 border-start border-warning border-4 bg-white">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Người Dùng</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-people-fill text-gray-300" style="font-size: 2.5rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Monthly Chart -->
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white border-bottom">
+                <h6 class="m-0 font-weight-bold text-primary">Biểu Đồ Doanh Thu & Đơn Hàng (Năm Nay)</h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Yearly Chart -->
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white border-bottom">
+                <h6 class="m-0 font-weight-bold text-primary">Thống Kê 5 Năm Gần Nhất</h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="yearlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 bg-white border-bottom">
+                <h6 class="m-0 font-weight-bold text-primary">Đơn Hàng Gần Đây</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4">Mã Đơn</th>
+                                <th>Khách Hàng</th>
+                                <th>Ngày Đặt</th>
+                                <th>Tổng Tiền</th>
+                                <th>Trạng Thái</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.RecentOrders)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold text-primary">#@order.OrderNumber</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar avatar-sm bg-light rounded-circle text-secondary d-flex align-items-center justify-content-center me-2">
+                                                <i class="bi bi-person-fill"></i>
+                                            </div>
+                                            <span class="fw-semibold text-dark">@(order.User?.FullName ?? order.RecipientName)</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-muted small">@order.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td class="fw-bold text-dark">@order.TotalAmount.ToString("N0") ₫</td>
+                                    <td>
+                                         <span class="badge rounded-pill bg-@GetStatusColor(order.Status)">
+                                            @GetStatusName(order.Status)
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a asp-action="Details" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                            Chi tiết
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public string GetStatusColor(Fahasa.Models.OrderStatus status)
+    {
+        switch (status)
+        {
+            case Fahasa.Models.OrderStatus.Pending: return "warning text-dark";
+            case Fahasa.Models.OrderStatus.Processing: return "info text-dark";
+            case Fahasa.Models.OrderStatus.Shipping: return "primary";
+            case Fahasa.Models.OrderStatus.Delivered: return "success";
+            case Fahasa.Models.OrderStatus.Cancelled: return "danger";
+            default: return "secondary";
+        }
+    }
+
+    public string GetStatusName(Fahasa.Models.OrderStatus status)
+    {
+        switch (status)
+        {
+            case Fahasa.Models.OrderStatus.Pending: return "Chờ xác nhận";
+            case Fahasa.Models.OrderStatus.Processing: return "Đang xử lý";
+            case Fahasa.Models.OrderStatus.Shipping: return "Đang giao hàng";
+            case Fahasa.Models.OrderStatus.Delivered: return "Đã giao hàng";
+            case Fahasa.Models.OrderStatus.Cancelled: return "Đã hủy";
+            default: return status.ToString();
+        }
+    }
+}
+
+@section Scripts {
+    <script src="~/lib/chart/chart.min.js"></script>
+    <script>
+        // Monthly Data
+        var monthlyLabels = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+        var monthlyRevenue = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyRevenue));
+        var monthlyOrders = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyOrders));
+
+        // Yearly Data
+        var yearlyLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Years));
+        var yearlyRevenue = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearlyRevenue));
+        var yearlyOrders = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearlyOrders));
+
+        // Format Currency
+        const formatter = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+
+        // 1. Monthly Chart (Mixed: Bar for Revenue, Line for Orders)
+        var ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+        var monthlyChart = new Chart(ctxMonthly, {
+            type: 'bar',
+            data: {
+                labels: monthlyLabels,
+                datasets: [
+                    {
+                        label: 'Doanh Thu',
+                        data: monthlyRevenue,
+                        backgroundColor: 'rgba(78, 115, 223, 0.8)',
+                        borderRadius: 4,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Số Đơn Hàng',
+                        data: monthlyOrders,
+                        type: 'line',
+                        borderColor: 'rgba(28, 200, 138, 1)',
+                        backgroundColor: 'rgba(28, 200, 138, 0.1)',
+                        pointRadius: 4,
+                        pointBackgroundColor: 'rgba(28, 200, 138, 1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        position: 'left',
+                        grid: { borderDash: [2] },
+                        ticks: {
+                            callback: function(value) { return formatter.format(value); }
+                        }
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { stepSize: 1 }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#6e707e',
+                        bodyColor: '#858796',
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.dataset.yAxisID === 'y') {
+                                    return label + formatter.format(context.raw);
+                                }
+                                return label + context.raw;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. Yearly Chart (Bar)
+        var ctxYearly = document.getElementById('yearlyChart').getContext('2d');
+        var yearlyChart = new Chart(ctxYearly, {
+            type: 'bar',
+            data: {
+                labels: yearlyLabels,
+                datasets: [{
+                    label: 'Doanh Thu',
+                    data: yearlyRevenue,
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { borderDash: [2] },
+                        ticks: {
+                            callback: function(value) { return formatter.format(value); }
+                        }
+                    },
+                    x: {
+                         grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                     tooltip: {
+                        backgroundColor: 'rgba(255,, 255, 0.9)',
+                        titleColor: '#6e707e',
+                        bodyColor: '#858796',
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        padding: 10,
+                        callbacks: {
+                            label: function(context) {
+                                return formatter.format(context.raw);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

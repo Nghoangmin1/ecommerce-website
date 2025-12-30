@@ -1,0 +1,386 @@
+/* Fahasa-inspired Bookstore Theme - UNIFIED STYLES */
+:root {
+    --fahasa-red: #C92127;
+    --fahasa-red-dark: #a81a1f;
+    --fahasa-white: #ffffff;
+    --fahasa-gray: #333333;
+    --fahasa-light-gray: #f0f0f0;
+    --fahasa-border: #e0e0e0;
+    --font-primary: 'Roboto', sans-serif !important;
+    /* Unified Font */
+}
+
+/* 1. GLOBAL FONT RESET */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+button,
+input,
+select,
+textarea,
+.btn,
+.nav-link {
+    font-family: 'Roboto', sans-serif !important;
+}
+
+/* 2. GLOBAL COLOR OVERRIDES (Removing Template Orange/Gradients) */
+/* Override gradients and orange backgrounds */
+.gradient-bg,
+.primary-btn,
+.add-bag .add-btn,
+.single-product .product-details .prd-bottom .social-info span:after,
+.grid-btn:hover,
+.list-btn:hover,
+.grid-btn.active,
+.list-btn.active,
+.pagination a.active,
+.pagination a:hover,
+.s_Product_carousel .owl-dots div.active,
+.s_product_text .card_area .icon_btn:after,
+.product_description_area .nav.nav-tabs li a.active,
+.blog-pagination .page-item.active .page-link,
+.single-footer-widget .click-btn,
+.genric-btn.primary,
+.header_area .navbar .nav .nav-item:hover .nav-link,
+.active-banner-slider .owl-nav div {
+    background: var(--fahasa-red) !important;
+    background-image: none !important;
+    /* Kill gradients */
+    border-color: var(--fahasa-red) !important;
+    color: #fff !important;
+}
+
+/* Text Colors */
+a:hover,
+.nav-link:hover,
+.footer-nav a:hover,
+.icon-item:hover,
+.s_product_text h2,
+.product_description_area .tab-content .total_rate .box_total h4 {
+    color: var(--fahasa-red) !important;
+    -webkit-text-fill-color: var(--fahasa-red) !important;
+    /* Override gradient text */
+    background: none !important;
+}
+
+/* Gradient Background Reverse Override */
+.gradient-bg-reverse,
+#search_input_box {
+    background: var(--fahasa-red) !important;
+}
+
+/* 3. Header Redesign (Refined) */
+.header_area {
+    background: var(--fahasa-white);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.header-top {
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.fahasa-logo img {
+    max-height: 40px;
+}
+
+.search-bar-container {
+    flex-grow: 1;
+    margin: 0 40px;
+    position: relative;
+}
+
+.search-form {
+    display: flex;
+    width: 100%;
+    border: 2px solid var(--fahasa-red);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.search-input {
+    flex-grow: 1;
+    border: none;
+    padding: 10px 15px;
+    outline: none;
+    font-size: 14px;
+}
+
+.search-btn {
+    background-color: var(--fahasa-red);
+    color: white;
+    border: none;
+    padding: 0 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.search-btn:hover {
+    background-color: var(--fahasa-red-dark);
+}
+
+/* Icons */
+.header-icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.icon-item {
+    text-align: center;
+    color: var(--fahasa-gray) !important;
+    /* Force gray initially */
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon-item i {
+    font-size: 22px;
+    margin-bottom: 2px;
+    color: var(--fahasa-gray) !important;
+}
+
+.icon-item:hover,
+.icon-item:hover i {
+    color: var(--fahasa-red) !important;
+}
+
+.cart-badge {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -5px;
+    background: var(--fahasa-red);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #fff;
+}
+
+/* Navigation */
+.header-bottom {
+    background: var(--fahasa-white);
+}
+
+.main-nav .nav-link {
+    color: var(--fahasa-gray) !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 15px 20px !important;
+    font-size: 14px;
+}
+
+.main-nav .nav-link:hover {
+    color: var(--fahasa-red) !important;
+    background: #f9f9f9 !important;
+    /* Subtle background on hover */
+}
+
+
+/* 4. Product Cards */
+.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--fahasa-gray);
+    margin-bottom: 20px;
+    padding-left: 15px;
+    border-left: 4px solid var(--fahasa-red);
+    text-transform: uppercase;
+}
+
+.book-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+    border: 1px solid #eee;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: var(--fahasa-red);
+}
+
+.book-img-wrapper {
+    position: relative;
+    padding-top: 140%;
+    overflow: hidden;
+    background: #fafafa;
+}
+
+.book-img-wrapper img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.book-info {
+    padding: 12px;
+}
+
+.book-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fahasa-gray);
+    margin-bottom: 8px;
+    height: 40px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.book-price {
+    font-size: 18px;
+    color: var(--fahasa-red) !important;
+    font-weight: 700;
+}
+
+.original-price {
+    font-size: 12px;
+    text-decoration: line-through;
+    color: #999;
+    margin-left: 8px;
+}
+
+.btn-add-cart-sm {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: white;
+    color: var(--fahasa-red) !important;
+    border: 1px solid var(--fahasa-red) !important;
+    border-radius: 4px;
+    padding: 5px 0;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-add-cart-sm:hover {
+    background: var(--fahasa-red) !important;
+    color: white !important;
+}
+
+/* 5. Footer (Clean White/Gray) */
+.footer-area {
+    background-color: var(--fahasa-white);
+    padding: 60px 0 30px;
+    border-top: 1px solid var(--fahasa-border);
+    margin-top: 50px;
+}
+
+.footer-area h6 {
+    color: var(--fahasa-gray);
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.footer-nav li {
+    margin-bottom: 10px;
+}
+
+.footer-nav a {
+    color: #666 !important;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.footer-nav a:hover {
+    color: var(--fahasa-red) !important;
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--fahasa-border);
+    margin-top: 40px;
+    padding-top: 20px;
+    text-align: center;
+    color: #999;
+}
+
+/* 6. Button Standardization */
+.primary-btn,
+.genric-btn.primary,
+.genric-btn.danger {
+    background: var(--fahasa-red) !important;
+    border-color: var(--fahasa-red) !important;
+    color: #fff !important;
+}
+
+.primary-btn:hover,
+.genric-btn.primary:hover,
+.genric-btn.danger:hover {
+    background: var(--fahasa-red-dark) !important;
+    color: #fff !important;
+}
+
+.genric-btn.primary-border,
+.genric-btn.danger-border {
+    color: var(--fahasa-red) !important;
+    border-color: var(--fahasa-red) !important;
+}
+
+.genric-btn.primary-border:hover,
+.genric-btn.danger-border:hover {
+    background: var(--fahasa-red) !important;
+    color: #fff !important;
+}
+
+/* Badge colors */
+.badge-danger,
+.badge-warning {
+    background-color: var(--fahasa-red) !important;
+    color: white !important;
+}
+
+.badge-success {
+    background-color: #28a745 !important;
+}
+
+.badge-info {
+    background-color: #17a2b8 !important;
+}
+
+.badge-secondary {
+    background-color: #6c757d !important;
+}
+
+/* Banner Text Override */
+.banner-content h1 {
+    color: var(--fahasa-gray) !important;
+}
+
+.banner-content p {
+    color: #555 !important;
+}

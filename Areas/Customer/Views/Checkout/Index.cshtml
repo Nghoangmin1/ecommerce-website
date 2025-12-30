@@ -1,0 +1,145 @@
+﻿@model Fahasa.ViewModels.CheckoutViewModel
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<!-- Breadcrumb -->
+<div class="bg-light py-3 mb-4 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-transparent p-0 m-0">
+                <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Home" asp-action="Index" class="text-dark">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="text-dark">Giỏ hàng</a></li>
+                <li class="breadcrumb-item active text-danger" aria-current="page">Thanh toán</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container mb-5">
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div class="alert alert-info shadow-sm mb-4">
+            <i class="bi bi-person-circle mr-2"></i> Bạn đã có tài khoản? <a href="/Identity/Account/Login?returnUrl=/Customer/Checkout" class="font-weight-bold">Đăng nhập ngay</a> để tích điểm thành viên.
+        </div>
+    }
+
+    <form asp-action="PlaceOrder" method="post" novalidate="novalidate">
+        @if (ViewBag.BuyNowBookId != null)
+        {
+            <input type="hidden" name="buyNowBookId" value="@ViewBag.BuyNowBookId" />
+            <input type="hidden" name="buyNowQuantity" value="@ViewBag.BuyNowQuantity" />
+        }
+        <div class="row">
+            <!-- Billing Details -->
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white font-weight-bold text-uppercase">Thông tin giao hàng</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="Order.RecipientName" class="font-weight-bold">Họ tên người nhận <span class="text-danger">*</span></label>
+                            <input asp-for="Order.RecipientName" class="form-control" placeholder="Nhập họ tên đầy đủ">
+                            <span asp-validation-for="Order.RecipientName" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="Order.Phone" class="font-weight-bold">Số điện thoại <span class="text-danger">*</span></label>
+                            <input asp-for="Order.Phone" class="form-control" placeholder="Nhập số điện thoại">
+                            <span asp-validation-for="Order.Phone" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label asp-for="Order.Province" class="font-weight-bold">Tỉnh/Thành phố <span class="text-danger">*</span></label>
+                                <input asp-for="Order.Province" class="form-control" placeholder="Tỉnh/Thành">
+                                <span asp-validation-for="Order.Province" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label asp-for="Order.District" class="font-weight-bold">Quận/Huyện <span class="text-danger">*</span></label>
+                                <input asp-for="Order.District" class="form-control" placeholder="Quận/Huyện">
+                                <span asp-validation-for="Order.District" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label asp-for="Order.Ward" class="font-weight-bold">Phường/Xã <span class="text-danger">*</span></label>
+                                <input asp-for="Order.Ward" class="form-control" placeholder="Phường/Xã">
+                                <span asp-validation-for="Order.Ward" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Order.AddressDetail" class="font-weight-bold">Địa chỉ chi tiết <span class="text-danger">*</span></label>
+                            <input asp-for="Order.AddressDetail" class="form-control" placeholder="Số nhà, tên đường...">
+                            <span asp-validation-for="Order.AddressDetail" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Order.Note" class="font-weight-bold">Ghi chú đơn hàng</label>
+                            <textarea asp-for="Order.Note" class="form-control" rows="3" placeholder="Ví dụ: Giao hàng giờ hành chính, gọi trước khi giao..."></textarea>
+                        </div>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <input type="hidden" asp-for="Order.UserId" />
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white font-weight-bold text-uppercase">Đơn hàng của bạn</div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in Model.Icon)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="my-0">@item.Book.Name</h6>
+                                        <small class="text-muted">x @item.Quantity</small>
+                                    </div>
+                                    <span class="text-muted">@item.TotalPrice.ToString("N0") đ</span>
+                                </li>
+                            }
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Tạm tính</span>
+                                <strong>@Model.TotalAmount.ToString("N0") đ</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Phí vận chuyển</span>
+                                <strong>0 đ</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between bg-light">
+                                <span class="h5 mb-0">Tổng cộng</span>
+                                <span class="h5 text-danger font-weight-bold mb-0">@Model.TotalAmount.ToString("N0") đ</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white font-weight-bold text-uppercase">Phương thức thanh toán</div>
+                    <div class="card-body">
+                        <div class="custom-control custom-radio mb-3">
+                            <input type="radio" id="paymentCod" name="Order.PaymentMethod" value="@Fahasa.Models.PaymentMethod.Cod" class="custom-control-input" checked>
+                            <label class="custom-control-label font-weight-bold" for="paymentCod">Thanh toán khi nhận hàng (COD)</label>
+                            <small class="d-block text-muted pl-1">Bạn sẽ thanh toán tiền mặt cho shipper khi nhận được hàng.</small>
+                        </div>
+                        <div class="custom-control custom-radio mb-3">
+                            <input type="radio" id="paymentBank" name="Order.PaymentMethod" value="@Fahasa.Models.PaymentMethod.BankTransfer" class="custom-control-input">
+                            <label class="custom-control-label font-weight-bold" for="paymentBank">Chuyển khoản ngân hàng</label>
+                            <small class="d-block text-muted pl-1">Quét mã QR hoặc chuyển khoản theo thông tin đơn hàng.</small>
+                        </div>
+                        
+                        <div class="custom-control custom-checkbox mb-3">
+                            <input type="checkbox" class="custom-control-input" id="termsCheck" required>
+                            <label class="custom-control-label small" for="termsCheck">Tôi đã đọc và đồng ý với <a href="#" class="text-danger">điều khoản mua hàng</a></label>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger btn-block btn-lg font-weight-bold shadow-sm">ĐẶT HÀNG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

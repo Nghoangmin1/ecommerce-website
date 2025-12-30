@@ -1,0 +1,62 @@
+@model Fahasa.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <h3 class="text-center mb-4 font-weight-bold text-danger">Đăng ký tài khoản</h3>
+                    
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                        </div>
+                    }
+
+                    <form asp-action="Register" method="post">
+                        <div class="form-group mb-3">
+                            <label asp-for="FullName" class="form-label control-label">Họ và tên</label>
+                            <input asp-for="FullName" class="form-control" placeholder="Nhập họ tên của bạn" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label control-label">Email</label>
+                            <input asp-for="Email" class="form-control" placeholder="Nhập email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Password" class="form-label control-label">Mật khẩu</label>
+                            <input asp-for="Password" class="form-control" placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="ConfirmPassword" class="form-label control-label">Nhập lại mật khẩu</label>
+                            <input asp-for="ConfirmPassword" class="form-control" placeholder="Nhập lại mật khẩu" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <button type="submit" class="btn btn-danger btn-block font-weight-bold py-2">ĐĂNG KÝ</button>
+                        </div>
+
+                        <div class="text-center">
+                            <p class="text-muted small">Đã có tài khoản? <a asp-action="Login" class="text-danger font-weight-bold">Đăng nhập ngay</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] | Fahasa Admin</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/admin/images/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/line.css">
+    <link rel="stylesheet" href="~/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+
+    <!-- Base Theme -->
+    <link href="~/admin/css/theme.min.css" type="text/css" rel="stylesheet" id="style-default">
+
+    <!-- Custom Premium Styles -->
+    <link href="~/admin/css/custom.css" rel="stylesheet" asp-append-version="true">
+</head>
+
+<body>
+
+    <div class="admin-wrapper">
+
+        <!-- ===============================================
+             SIDEBAR
+        ================================================ -->
+        <nav class="admin-sidebar shadow-sm">
+            <!-- Sidebar Header -->
+            <div class="sidebar-header">
+                <a class="text-decoration-none" href="~/admin/">
+                    <div class="sidebar-brand d-flex align-items-center">
+                        <img src="/customer/img/logo.png" alt="Fahasa" style="height: 28px; margin-right: 10px;">
+                    </div>
+                </a>
+            </div>
+
+            <!-- Sidebar Content -->
+            <div class="sidebar-content" data-simplebar>
+                <ul class="navbar-nav flex-column">
+
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Home" asp-action="Index">
+                            <span class="nav-link-icon"><i class="bi bi-grid"></i></span>
+                            <span class="nav-link-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")"
+                           asp-area="Admin" asp-controller="User" asp-action="Index">
+                            <span class="nav-link-icon"><i class="bi bi-people"></i></span>
+                            <span class="nav-link-text">Người dùng</span>
+                        </a>
+                    </li>
+
+                    <!-- CATALOG -->
+                    <li class="nav-item-header">Sản Phẩm & Kho</li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Category" asp-action="Index">
+                            <span class="nav-link-icon"><i class="bi bi-tag"></i></span>
+                            <span class="nav-link-text">Danh mục</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Book" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Book" asp-action="Index">
+                            <span class="nav-link-icon"><i class="bi bi-book"></i></span>
+                            <span class="nav-link-text">Sách</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Author" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Author" asp-action="Index">
+                            <span class="nav-link-icon"><i class="bi bi-pen"></i></span>
+                            <span class="nav-link-text">Tác giả</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Publisher" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Publisher" asp-action="Index">
+                            <span class="nav-link-icon"><i class="bi bi-building"></i></span>
+                            <span class="nav-link-text">Nhà xuất bản</span>
+                        </a>
+                    </li>
+
+                    <!-- BUSINESS -->
+                    <li class="nav-item-header">Kinh Doanh</li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Order" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Order" asp-action="Index">
+                            <span class="nav-link-icon"><i class="bi bi-receipt"></i></span>
+                            <span class="nav-link-text">Đơn hàng</span>
+                        </a>
+                    </li>
+
+                    @if (User.IsInRole("Shipper"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Shipper" ? "active" : "")"
+                               asp-area="Admin" asp-controller="Shipper" asp-action="Index">
+                                <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
+                                <span class="nav-link-text">Giao hàng</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <!-- Sidebar Footer (Profile) -->
+            <div class="sidebar-footer">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="avatar avatar-sm me-3">
+                        <div class="avatar-name rounded-circle bg-primary-subtle text-primary fw-bold">
+                            @User.Identity?.Name?.FirstOrDefault().ToString().ToUpper()
+                        </div>
+                    </div>
+                    <div class="overflow-hidden">
+                        <h6 class="mb-0 text-dark fw-bold text-truncate">@User.Identity?.Name</h6>
+                        <small class="text-muted">Administrator</small>
+                    </div>
+                </div>
+                <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                        <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+                    </button>
+                </form>
+            </div>
+        </nav>
+
+        <!-- ===============================================
+             MAIN CONTENT
+        ================================================ -->
+        <div class="admin-main">
+
+            <!-- Topbar -->
+            <header class="admin-topbar">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-link text-dark p-0 me-3 d-lg-none" id="sidebarToggle">
+                        <i class="bi bi-list fs-2"></i>
+                    </button>
+                    <div class="topbar-title">
+                        <h4 class="mb-0">@ViewData["Title"]</h4>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <a href="/" class="btn btn-light btn-sm fw-bold border text-secondary" target="_blank" title="Xem trang khách hàng">
+                        <i class="bi bi-shop me-2"></i>Cửa Hàng
+                    </a>
+                    
+                    <!-- Notification Bell (Demo) -->
+                    <button class="btn btn-link text-secondary position-relative p-0" style="width: 30px; height: 30px;">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                            <span class="visually-hidden">New alerts</span>
+                        </span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="admin-content">
+                @RenderBody()
+                
+                <footer class="mt-5 text-center text-muted fs-0">
+                    <small>© 2025 Fahasa Admin Panel. Designed for excellence.</small>
+                </footer>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/admin/js/popper.min.js"></script>
+    <script src="~/admin/js/bootstrap.min.js"></script>
+    <script src="~/admin/js/simplebar.min.js"></script>
+    <script src="~/admin/js/feather.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof feather !== 'undefined') feather.replace();
+
+            // Mobile Sidebar Toggle
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.admin-sidebar');
+            
+            // Create overlay
+            let overlay = document.querySelector('.sidebar-overlay');
+            if(!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'sidebar-overlay';
+                document.body.appendChild(overlay);
+            }
+
+            if(toggleBtn && sidebar) {
+                const toggle = () => {
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('show');
+                };
+                
+                toggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggle();
+                });
+                
+                overlay.addEventListener('click', toggle);
+            }
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

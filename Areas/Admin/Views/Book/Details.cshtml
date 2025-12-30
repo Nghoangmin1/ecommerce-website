@@ -1,0 +1,98 @@
+@model Fahasa.Models.Book
+
+@{
+    ViewData["Title"] = "Chi Tiết Sách";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <h4 class="mb-0 text-gray-800 fw-bold">Chi Tiết Sách</h4>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Quay lại
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-body text-center p-4">
+                 @{
+                    var imgSrc = !string.IsNullOrEmpty(Model.ImageUrl) ? Model.ImageUrl : "/images/default-placeholder.png";
+                }
+                <img src="@imgSrc" class="rounded shadow border mb-4" 
+                     style="width: 100%; height: auto; max-width: 220px;" alt="@Model.Name">
+                
+                <h5 class="fw-bold mb-1">@Model.Name</h5>
+                <p class="text-muted small mb-3">ID: @Model.Id</p>
+                
+                @if (Model.IsActive == true)
+                {
+                    <span class="badge bg-success rounded-pill px-3 py-2">Đang Kinh Doanh</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger rounded-pill px-3 py-2">Ngưng Kinh Doanh</span>
+                }
+
+                <div class="mt-4 d-grid gap-2">
+                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                        <i class="bi bi-pencil me-1"></i> Chỉnh sửa
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 bg-transparent border-bottom">
+                <h6 class="m-0 font-weight-bold text-primary">Thông Tin Chi Tiết</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-4">
+                    <div class="col-sm-4 text-muted fw-bold">Giá Bán</div>
+                    <div class="col-sm-8 fw-bold text-dark fs-5">@Model.Price.ToString("N0") đ</div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-sm-4 text-muted fw-bold">Giảm Giá</div>
+                    <div class="col-sm-8 text-danger fw-bold">@Model.DiscountPercent%</div>
+                </div>
+                 <div class="row mb-4">
+                    <div class="col-sm-4 text-muted fw-bold">Giá Khuyến Mãi</div>
+                    <div class="col-sm-8 text-danger fw-bold fs-5">
+                         @(Convert.ToDecimal(Model.Price * (1 - Model.DiscountPercent / 100m)).ToString("N0")) đ
+                    </div>
+                </div>
+                <hr class="my-4">
+                
+                <div class="row mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">Tác Giả</div>
+                    <div class="col-sm-8">@(Model.Author?.Name ?? "---")</div>
+                </div>
+                 <div class="row mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">Danh Mục</div>
+                    <div class="col-sm-8">@(Model.Category?.Name ?? "---")</div>
+                </div>
+                 <div class="row mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">Nhà Xuất Bản</div>
+                    <div class="col-sm-8">@(Model.Publisher?.Name ?? "---")</div>
+                </div>
+                 <div class="row mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">Tồn Kho</div>
+                    <div class="col-sm-8">@Model.StockQuantity</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">Năm Xuất Bản</div>
+                    <div class="col-sm-8">@(Model.PublicationYear?.ToString() ?? "---")</div>
+                </div>
+                
+                 <hr class="my-4">
+                <div class="mb-3">
+                    <label class="text-muted fw-bold mb-2">Mô Tả Sản Phẩm</label>
+                    <div class="bg-light p-3 rounded">
+                        <p class="mb-0 text-dark">@(Model.Description ?? "Chưa có mô tả.")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

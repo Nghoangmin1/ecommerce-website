@@ -1,0 +1,357 @@
+/* ===============================================
+   FAHASA ADMIN PREMIUM LIGHT THEME
+   =============================================== */
+
+:root {
+    /* Brand Colors */
+    --primary-color: #C92127;
+    /* Fahasa Red - Accent */
+    --primary-light: #FFF0F0;
+    /* Very light red for backgrounds */
+    --secondary-color: #2D3748;
+    /* Dark Slate Blue - Headings */
+
+    /* Backgrounds */
+    --bg-body: #F7F9FC;
+    /* Cool light gray - feels technical & clean */
+    --bg-surface: #FFFFFF;
+    /* Pure white for cards/sidebar */
+
+    /* Typography */
+    --text-main: #334155;
+    /* Slate 700 */
+    --text-muted: #94A3B8;
+    /* Slate 400 */
+    --font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    /* Dimensions */
+    --sidebar-width: 280px;
+    /* Slightly wider for better readability */
+    --topbar-height: 70px;
+
+    /* Shadows & Borders */
+    --border-color: #E2E8F0;
+    /* Slate 200 */
+    --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+}
+
+/* ===============================================
+   GLOBAL RESETS
+   =============================================== */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-body) !important;
+    color: var(--text-main) !important;
+    font-family: var(--font-family) !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ===============================================
+   LAYOUT GRID
+   =============================================== */
+.admin-wrapper {
+    display: flex !important;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* ===============================================
+   SIDEBAR (Premium Light)
+   =============================================== */
+.admin-sidebar {
+    width: var(--sidebar-width) !important;
+    background-color: var(--bg-surface) !important;
+    border-right: 1px solid var(--border-color);
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1040;
+    display: flex !important;
+    flex-direction: column !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    height: var(--topbar-height);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-brand .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+}
+
+/* Sidebar Nav */
+.sidebar-content {
+    flex: 1;
+    padding: 1.5rem 1rem;
+    overflow-y: auto;
+}
+
+.nav-item-header {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin: 1.5rem 0 0.5rem 1rem;
+}
+
+.nav-item {
+    margin-bottom: 2px;
+}
+
+.nav-link {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.75rem 1rem !important;
+    color: var(--text-main) !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px !important;
+    margin: 0 4px;
+}
+
+.nav-link:hover {
+    background-color: var(--bg-body) !important;
+    color: var(--primary-color) !important;
+    transform: translateX(3px);
+}
+
+.nav-link.active {
+    background-color: var(--primary-light) !important;
+    color: var(--primary-color) !important;
+    font-weight: 700 !important;
+}
+
+.nav-link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    font-size: 1.1rem;
+    color: #94A3B8;
+    /* Muted icon color by default */
+    transition: color 0.2s;
+}
+
+.nav-link:hover .nav-link-icon,
+.nav-link.active .nav-link-icon {
+    color: var(--primary-color);
+}
+
+/* Sidebar Footer (User Profile) */
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+}
+
+/* ===============================================
+   MAIN CONTENT AREA
+   =============================================== */
+.admin-main {
+    flex: 1 !important;
+    margin-left: var(--sidebar-width) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: calc(100% - var(--sidebar-width));
+    background-color: var(--bg-body);
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===============================================
+   TOPBAR
+   =============================================== */
+.admin-topbar {
+    height: var(--topbar-height);
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+
+.topbar-title h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+/* ===============================================
+   CONTENT & COMPONENTS
+   =============================================== */
+.admin-content {
+    padding: 2rem;
+    flex: 1;
+}
+
+/* Cards (Floaty & Clean) */
+.card {
+    background: var(--bg-surface) !important;
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--shadow-card) !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-hover) !important;
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: transparent !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 1.5rem !important;
+}
+
+.card-header h5 {
+    margin: 0;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.card-body {
+    padding: 1.5rem !important;
+}
+
+/* Tables (Spacious & Readable) */
+.table-responsive {
+    border-radius: 12px;
+    background: var(--bg-surface);
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table thead th {
+    background-color: #F8FAFC !important;
+    color: #64748B !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1.25rem 1rem !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    white-space: nowrap;
+}
+
+.table tbody td {
+    padding: 1.25rem 1rem !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-main);
+    font-size: 0.9rem;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.table tbody tr:hover td {
+    background-color: #F8FAFC !important;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 4px 6px -1px rgba(201, 33, 39, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: #B01D22 !important;
+    transform: translateY(-1px);
+}
+
+/* Badges */
+.badge-phoenix {
+    padding: 0.35em 0.8em;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+}
+
+/* Mobile Responsive */
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .admin-sidebar.show {
+        transform: translateX(0);
+    }
+
+    .admin-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    .admin-topbar {
+        padding: 0 1rem;
+    }
+
+    .admin-content {
+        padding: 1rem;
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1035;
+        display: none;
+        backdrop-filter: blur(2px);
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+    }
+}

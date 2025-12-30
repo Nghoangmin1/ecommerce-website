@@ -1,0 +1,61 @@
+@model Fahasa.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Chi Tiết Người Dùng";
+    var userRoles = ViewBag.UserRoles as IList<string>;
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <h4 class="mb-0 text-gray-800 fw-bold">Chi Tiết Người Dùng</h4>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Quay lại
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 bg-transparent border-bottom">
+                <h6 class="m-0 font-weight-bold text-primary">Thông Tin Hồ Sơ</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-4 mb-md-0">
+                        <div class="avatar avatar-5xl bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px;">
+                            <span class="display-3 fw-bold text-secondary">@Model.FullName?.Substring(0, 1).ToUpper()</span>
+                        </div>
+                        <h4 class="fw-bold text-dark">@Model.FullName</h4>
+                        <p class="text-muted">@Model.UserName</p>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="mb-3 border-bottom pb-2">
+                            <label class="small text-muted fw-bold text-uppercase">Email</label>
+                            <p class="h6 text-dark">@Model.Email</p>
+                        </div>
+                         <div class="mb-3 border-bottom pb-2">
+                            <label class="small text-muted fw-bold text-uppercase">Số Điện Thoại</label>
+                            <p class="h6 text-dark">@(Model.PhoneNumber ?? "---")</p>
+                        </div>
+                         <div class="mb-3 border-bottom pb-2">
+                            <label class="small text-muted fw-bold text-uppercase">Vai Trò</label>
+                            <div class="mt-1">
+                                 @if (userRoles != null && userRoles.Count > 0)
+                                {
+                                    foreach (var role in userRoles)
+                                    {
+                                        <span class="badge bg-primary me-1">@role</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Chưa phân quyền</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

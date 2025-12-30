@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36401.2 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahasa", "Fahasa.csproj", "{6315C1E0-E539-47DA-B8A9-31C68D4919ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6315C1E0-E539-47DA-B8A9-31C68D4919ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6315C1E0-E539-47DA-B8A9-31C68D4919ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6315C1E0-E539-47DA-B8A9-31C68D4919ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6315C1E0-E539-47DA-B8A9-31C68D4919ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EEEB9378-0EF5-46D8-BFBE-7CD530C3D3E4}
+	EndGlobalSection
+EndGlobal

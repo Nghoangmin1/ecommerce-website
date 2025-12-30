@@ -1,0 +1,116 @@
+@model IEnumerable<Fahasa.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+    var userRoles = ViewBag.UserRoles as Dictionary<string, IList<string>>;
+}
+
+<!-- Page Header -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h4 class="mb-0 text-gray-800 fw-bold">Danh Sách Người Dùng</h4>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 bg-transparent border-bottom">
+        <form class="d-flex align-items-center gap-3" asp-action="Index" method="get">
+            <div class="search-box position-relative" style="width: 300px;">
+                <input class="form-control ps-5" type="text" name="searchString" placeholder="Tìm kiếm tên, email, sđt..." value="@ViewBag.SearchString">
+                <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+            </div>
+            
+            <select name="roleFilter" class="form-select w-auto">
+                <option value="">Tất cả vai trò</option>
+                @if (ViewBag.Roles != null)
+                {
+                    foreach (var role in ViewBag.Roles)
+                    {
+                        <option value="@role.Name" selected="@(ViewBag.RoleFilter == role.Name)">@role.Name</option>
+                    }
+                }
+            </select>
+            
+            <button type="submit" class="btn btn-primary shadow-sm">
+                <i class="bi bi-filter me-1"></i> Lọc
+            </button>
+            
+            @if (!string.IsNullOrEmpty(ViewBag.SearchString) || !string.IsNullOrEmpty(ViewBag.RoleFilter))
+            {
+                <a asp-action="Index" class="btn btn-outline-secondary">Xóa lọc</a>
+            }
+        </form>
+    </div>
+    
+    <div class="card-body p-0">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Họ Tên</th>
+                        <th>Email</th>
+                        <th>Số Điện Thoại</th>
+                        <th>Vai Trò</th>
+                        <th class="text-end pe-4">Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-m me-3">
+                                        <div class="avatar-name rounded-circle bg-info-subtle text-info fw-bold d-flex align-items-center justify-content-center">
+                                            @item.FullName?.Substring(0, 1).ToUpper()
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold text-dark">@item.FullName</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@item.Email</td>
+                            <td>@(item.PhoneNumber ?? "---")</td>
+                            <td>
+                                @if (userRoles != null && userRoles.ContainsKey(item.Id))
+                                {
+                                    foreach (var role in userRoles[item.Id])
+                                    {
+                                        var roleBadgeClass = role == "Admin" ? "bg-danger" : (role == "Shipper" ? "bg-warning text-dark" : "bg-primary");
+                                        <span class="badge @roleBadgeClass rounded-pill me-1">@role</span>
+                                    }
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info" title="Chi tiết">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Xóa">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
